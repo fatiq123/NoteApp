@@ -12,22 +12,24 @@ abstract class NoteDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDAO
 
     companion object {
-        @Volatile
-        private var instance: NoteDatabase? = null
-        private val LOCK = Any()
+        private var INSTANCE: NoteDatabase? = null
 
-        operator fun invoke(context: Context) =
-            instance ?: synchronized(LOCK) {    // we use synchronized for multithreading
-                instance ?: createDatabase(context).also {
-                    instance = it
-                }
+        fun getInstance(context: Context): NoteDatabase {
+            /*
+            if instance is null - then create it;
+            if is not - then return it
+             */
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    NoteDatabase::class.java,
+                    "note_database"
+                ).build()
+
+                INSTANCE = instance
+                // return the instance
+                instance
             }
-
-        private fun createDatabase(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                NoteDatabase::class.java,
-                "note_db"
-            ).build()
+        }
     }
 }
