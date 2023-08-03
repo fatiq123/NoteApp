@@ -13,7 +13,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application = a
 
     private val repository: NoteRepository
 
-    private val getAllNotes: LiveData<MutableList<Note>>
+    val getAllNotes: LiveData<MutableList<Note>>
 
     init {
         val dao = NoteDatabase.getInstance(application).noteDao()
@@ -33,7 +33,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application = a
         repository.update(note = note)
     }
 
-    fun deleteAllNotes() =  viewModelScope.launch {
+    fun deleteAllNotes() = viewModelScope.launch {
         repository.deleteAllNotes()
     }
 }

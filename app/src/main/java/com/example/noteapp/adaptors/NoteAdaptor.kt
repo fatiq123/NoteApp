@@ -19,7 +19,7 @@ class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
         val textPriority: TextView = itemView.findViewById(R.id.text_view_priority) as TextView
     }
 
-    private fun setNotes(note: MutableList<Note>) {
+    fun setNotes(note: MutableList<Note>) {
         notesList = note
     }
 
