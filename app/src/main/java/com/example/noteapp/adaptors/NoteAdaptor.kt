@@ -24,6 +24,11 @@ class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
         notifyDataSetChanged()
     }
 
+    /* to delete a specific note */
+    fun getNoteAt(position: Int): Note {
+        return notesList[position]
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
         return NoteViewHolder(itemView = view)
