@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.NoteApp" parent="Base.Theme.NoteApp" />
+
+
+    <style name="Base.Theme.NoteApp.CustomTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+    </style>
 </resources>
