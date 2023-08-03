@@ -1,6 +1,5 @@
 package com.example.noteapp.adaptors
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapp.R
 import com.example.noteapp.model.Note
 
-class NoteAdaptor(
-    val context: Context,
-    private val notesList: List<Note>,
-) : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
+class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
+
+    private var notesList: MutableList<Note> = mutableListOf()
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textTitle: TextView = itemView.findViewById(R.id.text_view_title) as TextView
-        private val textDescription: TextView = itemView.findViewById(R.id.text_view_description) as TextView
-        private val textPriority: TextView = itemView.findViewById(R.id.text_view_priority) as TextView
+        val textTitle: TextView = itemView.findViewById(R.id.text_view_title) as TextView
+        val textDescription: TextView =
+            itemView.findViewById(R.id.text_view_description) as TextView
+        val textPriority: TextView = itemView.findViewById(R.id.text_view_priority) as TextView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdaptor.NoteViewHolder {
+    private fun setNotes(note: MutableList<Note>) {
+        notesList = note
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
         return NoteViewHolder(itemView = view)
     }
@@ -28,8 +31,9 @@ class NoteAdaptor(
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
 
         val note = notesList[position]
-
-
+        holder.textTitle.text = note.title
+        holder.textDescription.text = note.description
+        holder.textPriority.text = note.priority.toString()
     }
 
     override fun getItemCount(): Int {
