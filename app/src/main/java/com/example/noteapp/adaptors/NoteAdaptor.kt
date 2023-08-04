@@ -2,13 +2,17 @@ package com.example.noteapp.adaptors
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.noteapp.MainActivity
 import com.example.noteapp.R
 import com.example.noteapp.model.Note
 
-class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
+class NoteAdaptor(
+    private val listener: OnClickListener,
+) : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
 
     private var notesList: MutableList<Note> = mutableListOf()
 
@@ -17,6 +21,18 @@ class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
         val textDescription: TextView =
             itemView.findViewById(R.id.text_view_description) as TextView
         val textPriority: TextView = itemView.findViewById(R.id.text_view_priority) as TextView
+
+        init {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    listener.onClick(note = notesList[adapterPosition])
+                }
+            }
+        }
+    }
+
+    interface OnClickListener {      // this interface is to edit the specific note
+        fun onClick(note: Note)
     }
 
     fun setNotes(note: MutableList<Note>) {
