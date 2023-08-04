@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Title"
+        android:textSize="25sp"
+        android:textColorHint="@color/colorPrimary"
         android:inputType="text"
         android:autofillHints="title" />
 
@@ -22,6 +24,8 @@
         android:id="@+id/et_description"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:textSize="20sp"
+        android:textColorHint="@color/colorPrimaryVariant"
         android:hint="Description"
         android:inputType="textMultiLine"
         android:autofillHints="description" />
@@ -31,6 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Priority"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryVariant"
         android:textAppearance="@android:style/TextAppearance.Medium"/>
 
     <NumberPicker

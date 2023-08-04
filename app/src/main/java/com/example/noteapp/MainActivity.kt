@@ -21,6 +21,7 @@ import com.example.noteapp.model.Note
 import com.example.noteapp.utils.Constants
 import com.example.noteapp.viewmodel.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
 
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
 
         viewModel.getAllNotes.observe(this, Observer {
             // here we can add the data to our recyclerview
-            noteAdaptor.setNotes(it)
+            noteAdaptor.submitList(it)
         })
 
 
@@ -63,7 +64,9 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
 
                     val note =
                         Note(title = title!!, description = description!!, priority = priority!!)
+
                     viewModel.insert(note = note)
+
                 } else if (it.resultCode == Constants.EDIT_REQUEST_CODE) {
                     val title = it.data?.getStringExtra(Constants.EXTRA_TITLE)
                     val description = it.data?.getStringExtra(Constants.EXTRA_DESCRIPTION)
@@ -85,8 +88,9 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
         }
 
 
-       /* for swipe animation */
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        /* for swipe animation */
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -96,7 +100,17 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val removedItem = noteAdaptor.getNoteAt(viewHolder.adapterPosition)     /*so we will store the removedItem in a variable*/
                 viewModel.delete(noteAdaptor.getNoteAt(viewHolder.adapterPosition))
+
+                Snackbar.make(                      /*this Snackbar is to show the message to user to UNDO the deleted item again*/
+                    this@MainActivity,
+                    recyclerView,
+                    "Note Deleted",
+                    Snackbar.LENGTH_LONG
+                ).setAction("UNDO") {
+                    viewModel.insert(removedItem)
+                }.show()
             }
 
         }).attachToRecyclerView(recyclerView)
@@ -111,7 +125,7 @@ class MainActivity : AppCompatActivity(), NoteAdaptor.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.delete_all_notes -> {
                 viewModel.deleteAllNotes()
             }
