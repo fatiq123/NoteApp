@@ -21,6 +21,12 @@ class NoteAdaptor() : RecyclerView.Adapter<NoteAdaptor.NoteViewHolder>() {
 
     fun setNotes(note: MutableList<Note>) {
         notesList = note
+        notifyDataSetChanged()
+    }
+
+    /* to delete a specific note */
+    fun getNoteAt(position: Int): Note {
+        return notesList[position]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
