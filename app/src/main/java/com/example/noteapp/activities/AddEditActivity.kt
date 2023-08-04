@@ -32,8 +32,15 @@ class AddEditActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
 
-        title = "Add Note"
 
+        if (intent.hasExtra(Constants.EXTRA_ID)) {
+            title = "Edit Note"
+            editTitle.setText(intent.getStringExtra(Constants.EXTRA_TITLE))
+            editDescription.setText(intent.getStringExtra(Constants.EXTRA_DESCRIPTION))
+            numberPicker.value = intent.getIntExtra(Constants.EXTRA_PRIORITY, -1)
+        } else {
+            title = "Add Note"
+        }
     }
 
     private fun saveNote() {
@@ -51,13 +58,21 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
-
-        setResult(Constants.REQUEST_CODE, Intent().apply {
-            putExtra(Constants.EXTRA_TITLE, title)
-            putExtra(Constants.EXTRA_DESCRIPTION, description)
-            putExtra(Constants.EXTRA_PRIORITY, priority)
-        })
-
+        val id = intent.getIntExtra(Constants.EXTRA_ID, -1)
+        if (id != -1) {
+            setResult(Constants.EDIT_REQUEST_CODE, Intent().apply {
+                putExtra(Constants.EXTRA_TITLE, title)
+                putExtra(Constants.EXTRA_DESCRIPTION, description)
+                putExtra(Constants.EXTRA_PRIORITY, priority)
+                putExtra(Constants.EXTRA_ID, id)
+            })
+        } else {
+            setResult(Constants.REQUEST_CODE, Intent().apply {
+                putExtra(Constants.EXTRA_TITLE, title)
+                putExtra(Constants.EXTRA_DESCRIPTION, description)
+                putExtra(Constants.EXTRA_PRIORITY, priority)
+            })
+        }
         finish()
     }
 
